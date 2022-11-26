@@ -11,7 +11,16 @@ pub struct Card {
 
 impl Card {
     pub fn fight(&self, other: &Card) -> FightResult {
-        todo!()
+        use std::cmp::Ordering::*;
+        match (
+            self.damage.cmp(&other.health), // compare this cards damage to other cards hp
+            other.damage.cmp(&self.health), // compare other cards damge to this cards hp
+        ) {
+            (Less, Less) => FightResult::Draw, // both damages are less than health
+            (Greater | Equal, Less) => FightResult::Win, // only this cards damage is enough to win
+            (Less, Greater | Equal) => FightResult::Loss, // only other cards damage is enough to win
+            _ => FightResult::Tie,                        // cards both have enough damage to win
+        }
     }
 
     /// Give a play by play of the battle
